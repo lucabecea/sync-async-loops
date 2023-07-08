@@ -1,19 +1,27 @@
 class Synchronizer {
     currentStep = 0
-    allSteps = []
+    stepsResolvers = []
+    data = {}
 
-    async sync (index) {
-        const promise = new Promise(resolve => this.allSteps[index] = resolve)
-        this.rezolve()
+    sync (index) {
+        const promise = new Promise(resolve => this.stepsResolvers[index] = resolve)
+        this.next()
         return promise
     }
 
-    async rezolve() {
+    async next() {
         await new Promise(resolve => setTimeout(resolve, 0));
-        while(this.allSteps[this.currentStep]) {
-            this.allSteps[this.currentStep]()
+        while(this.stepsResolvers[this.currentStep]) {
+            this.stepsResolvers[this.currentStep]()
             this.currentStep = this.currentStep + 1
         }
+    }
+
+    runOnce(callback, name, ...params) {
+        if (!this.data[name]) {
+            this.data[name] =  callback(...params)
+        }
+        return this.data[name]
     }
 }
 

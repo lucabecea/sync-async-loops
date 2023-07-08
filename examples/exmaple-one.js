@@ -7,9 +7,13 @@ const populateTheArray = () => {
     }
 }
 
-const sleepRandom = async () => {
+const sleepRandom = async (p1, p2) => {
+    if (p1 !== 'param1' || p2 !== 'param2') {
+        console.warn('params error')
+    }
     const timeout = Math.random() * 10
-    return new Promise(resolve => setTimeout(resolve, timeout));
+    await new Promise(resolve => setTimeout(resolve, timeout));
+    return 'result'
 }
 
 const testResults = (results) => {
@@ -41,7 +45,7 @@ const exampleOne = async () => {
     console.time('2')
     for (const item of data) {
         resultsArrOne.push(item)
-        await sleepRandom()
+        await sleepRandom('param1', 'param2')
         resultsArrTwo.push(item)
     } 
     console.timeEnd('2')
@@ -50,14 +54,13 @@ const exampleOne = async () => {
 
     resultsArrOne = []
     resultsArrTwo = []
-    let synchronizer = new Synchronizer()
 
     console.warn('\n\n Mapping with sleep, and Promise.all')
     console.time('3')
     await Promise.all(
         data.map(async (item, index) => {
             resultsArrOne.push(item)
-            await sleepRandom()
+            await sleepRandom('param1', 'param2')
             resultsArrTwo.push(item)
         })
     )
@@ -67,14 +70,14 @@ const exampleOne = async () => {
 
     resultsArrOne = []
     resultsArrTwo = []
-    synchronizer = new Synchronizer()
+    const synchronizer = new Synchronizer()
 
     console.warn('\n\n Mapping with synchronization, sleep, and Promise.all')
     console.time('4')
     await Promise.all(
         data.map(async (item, index) => {
             resultsArrOne.push(item)
-            await sleepRandom()
+            await synchronizer.runOnce(sleepRandom, 'sleep', 'param1', 'param2')
             await synchronizer.sync(index)
             resultsArrTwo.push(item)
         })
