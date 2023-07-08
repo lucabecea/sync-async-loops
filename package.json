@@ -1,0 +1,22 @@
+{
+  "name": "sync-async-loops",
+  "version": "1.0.0",
+  "description": "a tool to help you controll asynchronous loops, speed things up, and make sure certain parts are executed in an orderly fashion while keeping the asynchronous nature of the loop",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucabecea/sync-async-loops.git"
+  },
+  "author": "Luca Becea",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lucabecea/sync-async-loops/issues"
+  },
+  "homepage": "https://github.com/lucabecea/sync-async-loops#readme"
+}
