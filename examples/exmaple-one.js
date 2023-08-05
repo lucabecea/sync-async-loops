@@ -12,7 +12,7 @@ const sleepRandom = async (p1, p2) => {
         console.warn('params error')
     }
     const timeout = Math.random() * 10
-    await new Promise(resolve => setTimeout(resolve, timeout));
+    await new Promise(resolve => setTimeout(resolve, 5));
     return 'result'
 }
 
@@ -70,23 +70,43 @@ const exampleOne = async () => {
 
     resultsArrOne = []
     resultsArrTwo = []
-    const synchronizer = new Synchronizer()
 
-    console.warn('\n\n Mapping with synchronization, sleep, and Promise.all')
+    console.warn('\n\n Mapping with synchronization, sleep, and without Promise.all')
     console.time('4')
-    await Promise.all(
-        data.map(async (item, index) => {
+	
+		await new Synchronizer(data, async (synchronizer, item, index) => {
+    // await Promise.all(
+        // data.map(async (item, index) => {
             resultsArrOne.push(item)
             await synchronizer.runOnce(sleepRandom, 'sleep', 'param1', 'param2')
             await synchronizer.sync(index)
             resultsArrTwo.push(item)
-        })
-    )
-    console.timeEnd('4')
+        // })
+    // )
+		})
+		console.timeEnd('4')
     testResults(resultsArrOne)
     testResults(resultsArrTwo)
-} 
 
+		resultsArrOne = []
+    resultsArrTwo = []
+
+    console.warn('\n\n Mapping with synchronization, sleep, waitAll,  and without Promise.all')
+    console.time('5')
+
+    await new Synchronizer(data, async (synchronizer, item, index) => {
+    	resultsArrOne.push(item)
+			await synchronizer.waitAll(index) // when the callback depends on the resultsArrOne, we have to wait for it to be created completely
+    	await synchronizer.runOnce(sleepRandom, 'sleep', 'param1', 'param2', resultsArrOne)
+    	await synchronizer.sync(index)
+    	resultsArrTwo.push(item)
+    })
+    console.timeEnd('5')
+    testResults(resultsArrOne)
+    testResults(resultsArrTwo)
+
+
+} 
 
 populateTheArray()
 exampleOne()

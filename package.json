@@ -1,6 +1,6 @@
 {
   "name": "sync-async-loops",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "a tool to help you controll asynchronous loops, speed things up, and make sure certain parts are executed in an orderly fashion while keeping the asynchronous nature of the loop",
   "main": "index.js",
   "directories": {
